@@ -117,11 +117,3 @@ CREATE TABLE Result (
     FOREIGN KEY (match_id) REFERENCES Matches(match_id),
     FOREIGN KEY (declared_by) REFERENCES Users(user_id)
 );
-
--- 11. Club
-CREATE TABLE Club (
-    club_id INT PRIMARY KEY AUTO_INCREMENT,
-    club_name VARCHAR(100) NOT NULL,
-    managed_by INT,
-    FOREIGN KEY (managed_by) REFERENCES Users(user_id)
-);
