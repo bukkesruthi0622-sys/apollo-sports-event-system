@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 mt-5">
+    
+    <div class="row g-5">
+        <div class="col-lg-6">
+            <a href="{{ url_for('student.events') }}" class="text-decoration-none text-secondary mb-3 d-inline-block"><i class="ph ph-arrow-left"></i> Back to Events</a>
+            <h2 class="display-5 fw-bold mb-3" style="color:var(--dark-blue);">{{ game.name }}</h2>
+            <div class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2 mb-4">{{ game.status|title }}</div>
+            
+            <h5 class="fw-bold">Game Rules</h5>
+            <p class="text-muted bg-light p-4 rounded-4 mt-2 mb-4">{{ game.rules }}</p>
+
+            <h5 class="fw-bold mt-5 mb-3">Registered Players ({{ registrations|length }})</h5>
+            <ul class="list-group list-group-flush rounded-4 shadow-sm" style="max-height:400px; overflow-y:auto;">
+                {% for reg in registrations %}
+                <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                    <div>
+                        <span class="fw-semibold d-block">{{ reg.student.name }}</span>
+                        <small class="text-muted">{{ reg.student.department }}</small>
+                    </div>
+                    <span class="badge bg-light text-dark rounded-pill">{{ reg.registered_at.strftime('%b %d') }}</span>
+                </li>
+                {% else %}
+                <li class="list-group-item text-muted py-4 text-center border-0 bg-light">Be the first to register!</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="mb-5">
+                <h4 class="fw-bold mb-3 text-dark">Game Rules</h4>
+                <p class="text-muted leading-relaxed" style="white-space: pre-wrap;">{{ game.rules or 'No specific rules provided for this event.' }}</p>
+            </div>
+            <div class="card shadow border-0 rounded-4 sticky-top" style="top: 100px;">
+                <div class="card-body p-5">
+                    <h3 class="fw-bold mb-4">Register for {{ game.name }}</h3>
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST">
+                        {{ form.csrf_token }}
+                        {{ form.game_id }}
+                        <div class="mb-3">
+                            {{ form.name.label(class="form-label fw-semibold") }}
+                            {{ form.name(class="form-control form-control-lg bg-light border-0", placeholder="First & Last Name") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.reg_number.label(class="form-label fw-semibold") }}
+                            {{ form.reg_number(class="form-control form-control-lg bg-light border-0", placeholder="e.g. 19BCE0001") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.department.label(class="form-label fw-semibold") }}
+                            {{ form.department(class="form-control form-control-lg bg-light border-0", placeholder="e.g. Computer Science") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.batch_year.label(class="form-label fw-semibold") }}
+                            {{ form.batch_year(class="form-select form-select-lg bg-light border-0") }}
+                        </div>
+                        <div class="mb-4">
+                            {{ form.mobile.label(class="form-label fw-semibold") }}
+                            {{ form.mobile(class="form-control form-control-lg bg-light border-0", placeholder="10-digit mobile number") }}
+                        </div>
+                        <div class="d-grid mt-2">
+                            {{ form.submit(class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm", style="background:var(--primary-blue); border:none;") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

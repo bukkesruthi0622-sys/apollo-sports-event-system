@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="display-5 fw-bold" style="color:var(--dark-blue);">All Registrations</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill">Back to Dashboard</a>
+    </div>
+
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-4">
+            
+            <form method="GET" class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <input type="text" name="department" class="form-control bg-light border-0" placeholder="Filter by Department (e.g. CS)" value="{{ request.args.get('department', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <select name="game_id" class="form-select bg-light border-0">
+                        <option value="">All Games</option>
+                        {% for g in games %}
+                        <option value="{{ g.id }}" {% if request.args.get('game_id') == g.id|string %}selected{% endif %}>{{ g.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4" style="background:var(--primary-blue); border:none;">Filter</button>
+                    <a href="{{ url_for('admin.view_registrations') }}" class="btn btn-outline-secondary rounded-pill px-4">Clear</a>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Reg No</th>
+                            <th>Department</th>
+                            <th>Batch/Year</th>
+                            <th>Mobile</th>
+                            <th>Sport</th>
+                            <th>Date Registered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registrations %}
+                        <tr>
+                            <td class="fw-semibold">{{ reg.student.name }}</td>
+                            <td class="fw-bold text-primary">{{ reg.student.reg_number or 'N/A' }}</td>
+                            <td>{{ reg.student.department }}</td>
+                            <td>{{ reg.student.batch_year or 'N/A' }}</td>
+                            <td>{{ reg.student.mobile }}</td>
+                            <td><span class="badge bg-secondary rounded-pill px-3">{{ reg.game.name }}</span></td>
+                            <td class="small text-muted">{{ reg.registered_at.strftime('%Y-%m-%d') }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="py-5 text-center text-muted">No student registrations found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

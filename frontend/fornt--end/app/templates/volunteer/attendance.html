@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="display-5 fw-bold" style="color:var(--dark-blue);">Attendance: {{ game.name }}</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill">Back to Dashboard</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+            <form method="POST">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Department</th>
+                                <th>Mobile</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reg in registrations %}
+                            <tr>
+                                <td class="fw-semibold">{{ reg.student.name }}</td>
+                                <td>{{ reg.student.department }}</td>
+                                <td>{{ reg.student.mobile }}</td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <input type="radio" class="btn-check" name="status_{{ reg.student.id }}" id="present_{{ reg.student.id }}" value="present" {% if attendance_records.get(reg.student.id) == 'present' %}checked{% endif %}>
+                                        <label class="btn btn-outline-success" for="present_{{ reg.student.id }}">Present</label>
+
+                                        <input type="radio" class="btn-check" name="status_{{ reg.student.id }}" id="absent_{{ reg.student.id }}" value="absent" {% if attendance_records.get(reg.student.id) == 'absent' %}checked{% endif %}>
+                                        <label class="btn btn-outline-danger" for="absent_{{ reg.student.id }}">Absent</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">No students registered yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if registrations %}
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" style="background:var(--primary-blue); border:none;">Save Attendance</button>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

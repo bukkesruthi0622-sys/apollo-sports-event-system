@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <h2 class="display-5 fw-bold mb-4 pt-3" style="color:var(--dark-blue);">Admin Dashboard</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border">
+        <div>
+            <h4 class="mb-1 text-dark">Welcome back, {{ current_user.username }}</h4>
+            <span class="badge bg-primary rounded-pill px-3">{{ current_user.role|title }}</span>
+        </div>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger shadow-sm rounded-pill px-4 fw-semibold">Logout</a>
+    </div>
+    
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="ph ph-calendar-plus display-4 mb-3" style="color:var(--primary-green);"></i>
+                    <h4 class="fw-bold text-dark h5">Events</h4>
+                    <p class="text-muted small">Add sports games.</p>
+                    <a href="{{ url_for('admin.manage_events') }}" class="btn btn-sm btn-primary rounded-pill px-3 mt-2" style="background:var(--primary-blue); border:none;">Manage</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="ph ph-calendar display-4 mb-3" style="color:#8b5cf6;"></i>
+                    <h4 class="fw-bold text-dark h5">Fixtures</h4>
+                    <p class="text-muted small">Publish matches.</p>
+                    <a href="{{ url_for('admin.manage_fixtures') }}" class="btn btn-sm btn-primary text-white rounded-pill px-3 mt-2 fw-semibold" style="background:#8b5cf6; border:none;">Schedule</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="ph ph-users-three display-4 mb-3" style="color:#f59e0b;"></i>
+                    <h4 class="fw-bold text-dark h5">Registrations</h4>
+                    <p class="text-muted small">View students.</p>
+                    <a href="{{ url_for('admin.view_registrations') }}" class="btn btn-sm btn-warning text-dark rounded-pill px-3 mt-2 fw-semibold">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card-body p-4 text-center">
+                    <i class="ph ph-chart-bar display-4 mb-3" style="color:#ef4444;"></i>
+                    <h4 class="fw-bold text-dark h5">Scores</h4>
+                    <p class="text-muted small">Manage live scores.</p>
+                    <a href="{{ url_for('admin.manage_scores') }}" class="btn btn-sm btn-danger rounded-pill px-3 mt-2">Update</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

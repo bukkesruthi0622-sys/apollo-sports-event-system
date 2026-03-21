@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="display-5 fw-bold" style="color:var(--dark-blue);">Manage Events</h2>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill">Back to Dashboard</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4">Create New Sport</h4>
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Game Name</label>
+                            <input type="text" name="name" class="form-control bg-light border-0" required placeholder="e.g. Volleyball">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Rules</label>
+                            <textarea name="rules" class="form-control bg-light border-0" rows="3" placeholder="Brief rules for the game"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold shadow-sm" style="background:var(--primary-blue); border:none;">Add Game</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card shadow border-0 rounded-4 h-100">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4">Existing Sports</h4>
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Game Name</th>
+                                    <th>Rules Snapshot</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for game in games %}
+                                <tr>
+                                    <td class="fw-semibold text-dark">{{ game.name }}</td>
+                                    <td class="small text-muted">{{ game.rules[:50] }}...</td>
+                                    <td class="text-end">
+                                        <form method="POST" action="{{ url_for('admin.delete_event', game_id=game.id) }}" onsubmit="return confirm('WARNING: Deleting this game will delete all connected scores and fixtures! Continue?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger px-3 rounded-pill">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="2" class="py-4 text-muted text-center">No games added yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
